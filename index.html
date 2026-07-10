@@ -1,4 +1,4 @@
-https://nhernan0.github.io/GSSU150/<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,12 +8,20 @@ https://nhernan0.github.io/GSSU150/<!DOCTYPE html>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; background-color: #f9f9f9; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 20px; max-width: 600px; margin: 20px auto; }
+        
         .trefoil-slot { cursor: pointer; padding: 15px; border: 1px solid #ccc; border-radius: 12px; transition: 0.3s; background: white; }
         .trefoil { width: 50px; height: 50px; fill: #e0e0e0; transition: 0.3s; }
         .punched .trefoil { fill: #00ae58; }
         .date-text { font-size: 0.7rem; color: #555; height: 1.5em; margin-top: 5px; font-weight: bold; }
         
-        #reward-slot { margin: 40px auto; padding: 20px; border: 2px dashed #00ae58; border-radius: 15px; max-width: 400px; display: none; background: #e8f5e9; color: #00ae58; }
+        /* Reward Slot Styles */
+        .reward-slot { 
+            margin-top: 40px; padding: 20px; border: 2px dashed #00ae58; 
+            border-radius: 15px; max-width: 400px; display: none; 
+            background: #e8f5e9; color: #00ae58; margin-left: auto; margin-right: auto;
+        }
+        .reward-icon { font-size: 40px; }
+        
         #reset-btn { margin-top: 30px; padding: 10px 20px; background-color: #ff4d4d; color: white; border: none; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
@@ -22,9 +30,9 @@ https://nhernan0.github.io/GSSU150/<!DOCTYPE html>
     <h1>Service Unit 150 Meeting Attendance</h1>
     <div class="grid" id="punch-grid"></div>
 
-    <div id="reward-slot">
-        <h2>🎉 Reward Unlocked!</h2>
-        <p>Congratulations! A $25 GS Shop Gift Card is yours.</p>
+    <div class="reward-slot" id="reward-slot">
+        <div class="reward-icon">🎁</div>
+        <div class="reward-text"><h2>🎉 Reward Unlocked!</h2><p>Congratulations! A $25 GS Shop Gift Card is yours.</p></div>
     </div>
     
     <button id="reset-btn" onclick="resetTracker()">Reset Tracker</button>
@@ -32,17 +40,20 @@ https://nhernan0.github.io/GSSU150/<!DOCTYPE html>
     <script>
         const grid = document.getElementById('punch-grid');
 
+        // Logic to check if all 10 are punched
         function checkCompletion() {
             let count = 0;
             for (let i = 1; i <= 10; i++) {
                 if (localStorage.getItem(`slot-${i}-date`)) count++;
             }
+            
             if (count === 10) {
                 document.getElementById('reward-slot').style.display = 'block';
                 confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             }
         }
 
+        // Generate the 10 slots
         for (let i = 1; i <= 10; i++) {
             const slot = document.createElement('div');
             slot.className = 'trefoil-slot';
@@ -70,7 +81,7 @@ https://nhernan0.github.io/GSSU150/<!DOCTYPE html>
             grid.appendChild(slot);
         }
 
-        // Run on load to check if already completed
+        // Check completion on initial load
         checkCompletion();
 
         function resetTracker() {
