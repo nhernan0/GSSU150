@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troop Attendance Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; background-color: #f9f9f9; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 20px; max-width: 600px; margin: 20px auto; }
+        .trefoil-slot { cursor: pointer; padding: 15px; border: 1px solid #ccc; border-radius: 12px; transition: 0.3s; background: white; }
+        .trefoil { width: 50px; height: 50px; fill: #e0e0e0; transition: 0.3s; }
+        .punched .trefoil { fill: #00ae58; }
+        .date-text { font-size: 0.7rem; color: #555; height: 1.5em; margin-top: 5px; font-weight: bold; }
+        
+        #reward-slot { margin: 40px auto; padding: 20px; border: 2px dashed #00ae58; border-radius: 15px; max-width: 400px; display: none; background: #e8f5e9; color: #00ae58; }
+        #reset-btn { margin-top: 30px; padding: 10px 20px; background-color: #ff4d4d; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h1>Troop Attendance</h1>
+    <div class="grid" id="punch-grid"></div>
+
+    <div id="reward-slot">
+        <h2>🎉 Reward Unlocked!</h2>
+        <p>Congratulations! A $25 GS Shop Gift Card is yours.</p>
+    </div>
+    
+    <button id="reset-btn" onclick="resetTracker()">Reset Tracker</button>
+
+    <script>
+        const grid = document.getElementById('punch-grid');
+
+        function checkCompletion() {
+            let count = 0;
+            for (let i = 1; i <= 10; i++) {
+                if (localStorage.getItem(`slot-${i}-date`)) count++;
+            }
+            if (count === 10) {
+                document.getElementById('reward-slot').style.display = 'block';
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }
+        }
+
+        for (let i = 1; i <= 10; i++) {
+            const slot = document.createElement('div');
+            slot.className = 'trefoil-slot';
+            slot.id = `slot-${i}`;
+            slot.innerHTML = `
+                <svg class="trefoil" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V22h8v-7.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7z"/></svg>
+                <div class="date-text"></div>
+            `;
+            
+            const savedDate = localStorage.getItem(`slot-${i}-date`);
+            if (savedDate) {
+                slot.classList.add('punched');
+                slot.querySelector('.date-text').innerText = savedDate;
+            }
+
+            slot.onclick = () => {
+                if (!slot.classList.contains('punched')) {
+                    const date = new Date().toLocaleDateString();
+                    slot.classList.add('punched');
+                    slot.querySelector('.date-text').innerText = date;
+                    localStorage.setItem(`slot-${i}-date`, date);
+                    checkCompletion();
+                }
+            };
+            grid.appendChild(slot);
+        }
+
+        // Run on load to check if already completed
+        checkCompletion();
+
+        function resetTracker() {
+            if (confirm("Are you sure you want to clear all punches?")) {
+                for (let i = 1; i <= 10; i++) localStorage.removeItem(`slot-${i}-date`);
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
