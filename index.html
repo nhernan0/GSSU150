@@ -10,11 +10,13 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 20px; max-width: 600px; margin: 20px auto; }
         
         .trefoil-slot { cursor: pointer; padding: 15px; border: 1px solid #ccc; border-radius: 12px; transition: 0.3s; background: white; }
-        .trefoil { width: 50px; height: 50px; fill: #e0e0e0; transition: 0.3s; }
-        .punched .trefoil { fill: #00ae58; }
+        
+        /* Gray when not punched, full color when punched */
+        .trefoil { width: 50px; height: 50px; filter: grayscale(100%) brightness(0.7); transition: 0.3s; }
+        .punched .trefoil { filter: grayscale(0%) brightness(100%); }
+        
         .date-text { font-size: 0.7rem; color: #555; height: 1.5em; margin-top: 5px; font-weight: bold; }
         
-        /* Reward Slot Styles */
         .reward-slot { 
             margin-top: 40px; padding: 20px; border: 2px dashed #00ae58; 
             border-radius: 15px; max-width: 400px; display: none; 
@@ -40,28 +42,24 @@
     <script>
         const grid = document.getElementById('punch-grid');
 
-        // Logic to check if all 10 are punched
         function checkCompletion() {
             let count = 0;
             for (let i = 1; i <= 10; i++) {
                 if (localStorage.getItem(`slot-${i}-date`)) count++;
             }
-            
             if (count === 10) {
                 document.getElementById('reward-slot').style.display = 'block';
                 confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             }
         }
 
-        // Generate the 10 slots with an accurate Trefoil SVG
         for (let i = 1; i <= 10; i++) {
             const slot = document.createElement('div');
             slot.className = 'trefoil-slot';
             slot.id = `slot-${i}`;
+            // Uses the image file instead of SVG code
             slot.innerHTML = `
-                <svg class="trefoil" viewBox="0 0 200 200">
-                    <path d="M100 20 C120 20, 140 40, 140 60 C140 80, 120 100, 100 100 C80 100, 60 80, 60 60 C60 40, 80 20, 100 20 Z M100 100 C120 100, 140 120, 140 140 C140 160, 120 180, 100 180 C80 180, 60 160, 60 140 C60 120, 80 100, 100 100 Z M40 70 C60 70, 80 90, 80 110 C80 130, 60 150, 40 150 C20 150, 0 130, 0 110 C0 90, 20 70, 40 70 Z M160 70 C180 70, 200 90, 200 110 C200 130, 180 150, 160 150 C140 150, 120 130, 120 110 C120 90, 140 70, 160 70 Z" />
-                </svg>
+                <img src="trefoil.png" class="trefoil" alt="Trefoil">
                 <div class="date-text"></div>
             `;
             
@@ -83,7 +81,6 @@
             grid.appendChild(slot);
         }
 
-        // Check completion on initial load
         checkCompletion();
 
         function resetTracker() {
