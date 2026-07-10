@@ -53,16 +53,15 @@
             }
         }
 
-        // Generate the 10 slots
+        // Generate the 10 slots with an accurate Trefoil SVG
         for (let i = 1; i <= 10; i++) {
             const slot = document.createElement('div');
             slot.className = 'trefoil-slot';
             slot.id = `slot-${i}`;
             slot.innerHTML = `
-               <svg class="trefoil" viewBox="0 0 100 100">
-                   <path d="M50,10 C60,10 70,20 70,30 C70,40 60,50 50,50 C40,50 30,40 30,30 C30,20 40,10 50,10 Z M50,50 L50,90 M30,50 L10,80 M70,50 L90,80" 
-                      stroke="currentColor" stroke-width="8" stroke-linecap="round" fill="none"/>
-               </svg>
+                <svg class="trefoil" viewBox="0 0 200 200">
+                    <path d="M100 20 C120 20, 140 40, 140 60 C140 80, 120 100, 100 100 C80 100, 60 80, 60 60 C60 40, 80 20, 100 20 Z M100 100 C120 100, 140 120, 140 140 C140 160, 120 180, 100 180 C80 180, 60 160, 60 140 C60 120, 80 100, 100 100 Z M40 70 C60 70, 80 90, 80 110 C80 130, 60 150, 40 150 C20 150, 0 130, 0 110 C0 90, 20 70, 40 70 Z M160 70 C180 70, 200 90, 200 110 C200 130, 180 150, 160 150 C140 150, 120 130, 120 110 C120 90, 140 70, 160 70 Z" />
+                </svg>
                 <div class="date-text"></div>
             `;
             
