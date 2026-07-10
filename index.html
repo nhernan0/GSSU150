@@ -34,7 +34,7 @@
             border: 1px solid #e0e0e0;
         }
 
-        h1 { font-size: 1.5rem; color: #005b33; margin-top: 0; }
+        h1 { font-size: 1.4rem; color: #005b33; margin-top: 0; }
 
         .grid { 
             display: grid; 
@@ -58,21 +58,21 @@
             border-radius: 8px; display: none; background: #e8f5e9; color: #005b33; 
         }
         
-        #reset-btn { margin-top: 20px; padding: 8px 16px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #reset-btn { margin-top: 20px; padding: 8px 16px; background-color: #ff4d4d; color: white; border: none; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h1>SU 150 Attendance</h1>
+        <h1>Service Unit 150 Meeting Attendance</h1>
         <div class="grid" id="punch-grid"></div>
 
         <div class="reward-slot" id="reward-slot">
-            <div style="font-size: 30px;">🎁</div>
-            <p><strong>Gift Card Unlocked!</strong></p>
+            <h2>🎉 Reward Unlocked!</h2>
+            <p>Congratulations! A $25 GS Shop Gift Card is yours.</p>
         </div>
         
-        <button id="reset-btn" onclick="resetTracker()">Reset Card</button>
+        <button id="reset-btn" onclick="resetTracker()">Reset Tracker</button>
     </div>
 
     <script>
@@ -119,7 +119,7 @@
         checkCompletion();
 
         function resetTracker() {
-            if (confirm("Reset the entire punch card?")) {
+            if (confirm("Are you sure you want to clear all punches?")) {
                 for (let i = 1; i <= 10; i++) localStorage.removeItem(`slot-${i}-date`);
                 location.reload();
             }
